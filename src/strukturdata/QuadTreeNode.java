@@ -7,12 +7,12 @@ public class QuadTreeNode {
     private boolean isParent;
 
     // ctor
-    public QuadTreeNode(Pixel[][] region, int x, int y, int w, int h) {
+    public QuadTreeNode(Pixel[][] region, int x, int y, int w, int h, int depth) {
         this.x = x;
         this.y = y;
         this.w = w;
         this.h = h;
-        this.depth = 0;
+        this.depth = depth;
         this.q1 = null;
         this.q2 = null;
         this.q3 = null;
