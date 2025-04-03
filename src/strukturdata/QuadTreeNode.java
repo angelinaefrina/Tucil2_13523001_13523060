@@ -1,46 +1,58 @@
 package strukturdata;
 
-import java.awt.Color;
-
 public class QuadTreeNode {
-    Color color;
+    Pixel[][] block;
     int x, y, w, h, depth;
     private QuadTreeNode q1, q2, q3, q4;
     private boolean isParent;
 
     // ctor
-    public QuadTreeNode(int x, int y, int w, int h) {
-        this.color = null;
+    public QuadTreeNode(Pixel[][] region, int x, int y, int w, int h) {
         this.x = x;
         this.y = y;
         this.w = w;
         this.h = h;
+        this.depth = 0;
         this.q1 = null;
         this.q2 = null;
         this.q3 = null;
         this.q4 = null;
         this.isParent = false;
+        this.block = getBlockPixels(region, x, y, w, h);
     }
 
-    public static QuadTreeNode createChildNode (int x, int y, int w, int h) {
-        return new QuadTreeNode(x, y, w, h);
+    public static QuadTreeNode createChildNode (Pixel[][] region, int x, int y, int w, int h, int depth) {
+        return new QuadTreeNode(region, x, y, w, h, depth);
     }
 
     public boolean isDivideable (int minblock_size) {
         return (!this.isParent && this.w > minblock_size && this.h > minblock_size);
     }
 
-    public QuadTreeNode[] divideBlock (int minblock_size) {
+    public Pixel[][] getBlockPixels (Pixel[][] region, int x, int y, int w, int h) {
+        Pixel[][] block = new Pixel[h][w];
+        for (int i = 0; i < h; i++) {
+            for (int j = 0; j < w; j++) {
+                block[i][j] = region[y + i][x + j];
+            }
+        }
+        return block;
+    }
+
+    public QuadTreeNode[] divideBlock (Pixel[][] region, int minblock_size) {
+
         if (!isDivideable(minblock_size)) {
             return null;
-        } else {
+        } 
+        else {
             this.isParent = true;
             int half_w = this.w / 2;
             int half_h = this.h / 2;
-            q1 = createChildNode(this.x, this.y, half_w, half_h);
-            q2 = createChildNode(this.x + half_w, this.y, half_w, half_h);
-            q3 = createChildNode(this.x, this.y + half_h, half_w, half_h);
-            q4 = createChildNode(this.x + half_w, this.y + half_h, half_w, half_h);
+
+            q1 = createChildNode(region, this.x, this.y, half_w, half_h, this.depth + 1);
+            q2 = createChildNode(region, this.x + half_w, this.y, half_w, half_h, this.depth + 1);
+            q3 = createChildNode(region, this.x, this.y + half_h, half_w, half_h, this.depth + 1);
+            q4 = createChildNode(region, this.x + half_w, this.y + half_h, half_w, half_h, this.depth + 1);
             return new QuadTreeNode[] {q1, q2, q3, q4};
         }
     }
