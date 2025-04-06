@@ -41,4 +41,45 @@ public class ErrorMeasurement {
         double variansi_rgb =  (variansi_red+variansi_green+variansi_blue)/3;
         return variansi_rgb;
     }
+    
+    //metode pengukuran error dengan Mean Absolute Deviation (MAD)
+    public static double mean_absolute_deviation(QuadTreeNode newNode){
+        Pixel[][] newBlockPixels = newNode.getBlockPixels(null, 0, 0, 0, 0); 
+        int panjang = newBlockPixels.length;
+        int lebar = newBlockPixels[0].length;  
+        int N = panjang*lebar;
+
+        int sum_red = 0;
+        int sum_green = 0;
+        int sum_blue = 0;
+        for (int i=0;i<panjang;i++){
+            for (int j=0;j<lebar;j++){
+                sum_red += newBlockPixels[i][j].getRed();
+                sum_green += newBlockPixels[i][j].getGreen();
+                sum_blue += newBlockPixels[i][j].getBlue();
+            }
+        }
+
+        double average_red = sum_red/N;
+        double average_green = sum_green/N;
+        double average_blue = sum_blue/N;
+
+        double a = 0;
+        double b = 0;
+        double c = 0;
+        for (int i=0;i<panjang;i++){
+            for (int j=0;j<lebar;j++){
+                a += Math.abs(newBlockPixels[i][j].getRed()-average_red);
+                b += Math.abs(newBlockPixels[i][j].getGreen()-average_green);
+                c += Math.abs(newBlockPixels[i][j].getBlue()-average_blue);
+            }
+        }
+
+        double MAD_red = (1/N)*a;
+        double MAD_green = (1/N)*b;
+        double MAD_blue = (1/N)*c;
+
+        double MAD_rgb = (MAD_red+MAD_green+MAD_blue)/3;
+        return MAD_rgb;
+    }
 }
