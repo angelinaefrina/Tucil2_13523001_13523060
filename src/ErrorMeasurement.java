@@ -41,7 +41,7 @@ public class ErrorMeasurement {
         double variansi_rgb =  (variansi_red+variansi_green+variansi_blue)/3;
         return variansi_rgb;
     }
-    
+
     //metode pengukuran error dengan Mean Absolute Deviation (MAD)
     public static double mean_absolute_deviation(QuadTreeNode newNode){
         Pixel[][] newBlockPixels = newNode.getBlockPixels(null, 0, 0, 0, 0); 
@@ -81,5 +81,51 @@ public class ErrorMeasurement {
 
         double MAD_rgb = (MAD_red+MAD_green+MAD_blue)/3;
         return MAD_rgb;
+    }
+
+    //metode pengukuran error dengan Max Pixel Difference (MPD)
+    public static double max_pixel_difference(QuadTreeNode newNode){
+        Pixel[][] newBlockPixels = newNode.getBlockPixels(null, 0, 0, 0, 0); 
+        int panjang = newBlockPixels.length;
+        int lebar = newBlockPixels[0].length;
+
+        int min_red = 99999;
+        int max_red = -99999;
+        int min_green = 99999;
+        int max_green = -99999;
+        int min_blue = 99999;
+        int max_blue = -99999;
+        for(int i=0;i<panjang;i++){
+            for(int j=0;j<lebar;j++){
+                int red_now = newBlockPixels[i][j].getRed();
+                int green_now = newBlockPixels[i][j].getGreen();
+                int blue_now = newBlockPixels[i][j].getBlue();
+                if(red_now>max_red){
+                    max_red=red_now;
+                }
+                if(red_now<min_red){
+                    min_red=red_now;
+                }
+                if(green_now>max_green){
+                    max_green=green_now;
+                }
+                if(green_now<min_green){
+                    min_green=green_now;
+                }
+                if(blue_now>max_blue){
+                    max_blue=blue_now;
+                }
+                if(blue_now<min_blue){
+                    min_blue=blue_now;
+                }
+            }
+        }
+
+        int d_red = max_red-min_red;
+        int d_green = max_green-min_green;
+        int d_blue = max_blue-min_blue;
+        
+        double d_rgb = (d_red+d_green+d_blue)/3;
+        return d_rgb;
     }
 }
