@@ -1,112 +1,83 @@
 import strukturdata.Matriks;
-import strukturdata.QuadTreeNode;
+import java.util.Scanner;
 
 public class ImageCompression {
 
-    // public static boolean checkThresholdMethodError(int error_method) {
-    //     if (error_method = 1) {
-    //         // apa
-    //     }
-    //     if (error_method)
-    //     return true;
-    // }
-    
-
-    // public static void main(String[] args) {
-        
-    //     // Membaca input file gambar
-    //     String inputpath = InputOutputFile.inputFile();
-    //     Matriks image_data = InputOutputFile.bacaFileGambar(inputpath);
-
-
-
-
-    //     // if (image_data != null) {
-    //     //     System.out.println("Matriks pixel dari gambar:");
-    //     //     image_data.saveMatrixToText(image_data, "../src/image_data.txt");
-    //     // } else {
-    //     //     System.out.println("Gagal membaca file gambar.");
-    //     // }
-
-    //     // Meminta input pilihan metode error
-    //     Scanner scanner = new Scanner(System.in);
-    //     System.out.println("Pilih metode perhitungan error:");
-    //     System.out.println("1. Variance");
-    //     System.out.println("2. Mean Absolute Difference");
-    //     System.out.println("3. Max Pixel Difference");
-    //     System.out.println("4. Entropy");
-        
-    //     int error_method = 0;
-    //     while (true) { 
-    //         System.out.print("Masukkan pilihan (1-4): ");
-    //         error_method = scanner.nextInt();
-    //         if (error_method < 1 || error_method > 4) {
-    //             System.out.println("Pilihan tidak valid! Coba lagi.");
-    //             continue;
-    //         } else {
-    //             break;
-    //         }
-    //     }
-
-    //     // Meminta input threshold
-    //     double threshold = 0.0;
-    //     while (true) {
-    //         System.out.println("Masukkan ambang batas (threshold) : ");
-    //         threshold = scanner.nextDouble();
-    //         // Uncomment and implement the condition below if needed
-    //         // if (!checkThresholdMethodError(error_method)) {
-    //         //     System.out.println("Threshold tidak sesuai/invalid! Coba lagi.");
-    //         //     continue;
-    //         // } 
-    //         break; 
-    //     }
-
-    //     // Meminta input minimum block size
-        
-    //     while (true) {
-    //         int minblock_size;
-    //         System.out.println("Masukkan ukuran minimum blok : ");
-    //         minblock_size = scanner.nextInt();
-    //         if (minblock_size <= 0 || minblock_size > image_data.baris || minblock_size > image_data.kolom) {
-    //             System.out.println("Ukuran minimum blok tidak valid! Coba lagi.");
-    //             continue;
-    //         } else {
-    //             break;
-    //         }
-    //     }
-
-    //     // Output Testing
-        
-    //     InputOutputFile.outputFile(image_data, inputpath);
-
-
-    // }
 
     public static void main(String[] args) {
-        int minBlockSize = 4;
-
         String inputPath = InputOutputFile.inputFile();
         Matriks matrix = InputOutputFile.bacaFileGambar(inputPath);
-
-        int width = matrix.baris; 
-        int height = matrix.kolom;
+        if(matrix == null) {
+            System.out.println("Gagal membaca gambar. Program dihentikan.");
+            return;
+        }
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Pilih metode perhitungan error:");
+        System.out.println("1. Variance");
+        System.out.println("2. Mean Absolute Difference");
+        System.out.println("3. Max Pixel Difference");
+        System.out.println("4. Entropy");
+        int error_method = 0;
+        while (true) { 
+           System.out.print("Masukkan pilihan (1-4): ");
+           error_method = scanner.nextInt();
+           if (error_method < 1 || error_method > 4) {
+               System.out.println("Pilihan tidak valid! Coba lagi.");
+               continue;
+           } else {
+               break;
+           }
+       }
+        // Meminta input threshold
+        double threshold = 0.0;
+        while (true) {
+            System.out.println("Masukkan ambang batas (threshold) : ");
+            threshold = scanner.nextDouble();
+            if (error_method==1){
+                if (threshold <10 || threshold > 1000) {
+                    System.out.println("Threshold tidak sesuai/invalid! Coba lagi.");
+                    continue;
+                }
+            }
+            else if (error_method==2){
+                if (threshold <5 || threshold > 20) {
+                    System.out.println("Threshold tidak sesuai/invalid! Coba lagi.");
+                    continue;
+                }
+            }
+            else if (error_method==3){
+                if (threshold <5 || threshold > 25) {
+                    System.out.println("Threshold tidak sesuai/invalid! Coba lagi.");
+                    continue;
+                }
+            }
+            else if (error_method==4){
+                if (threshold <0.5 || threshold > 3.0) {
+                    System.out.println("Threshold tidak sesuai/invalid! Coba lagi.");
+                    continue;
+                }
+            }
+            break; 
+      }
+        double minBlockSize = 0.0;
+        while (true) {
+            System.out.println("Masukkan ukuran blok minimum (luas piksel) : ");
+            minBlockSize = scanner.nextDouble();
+            if (minBlockSize <= 0 || minBlockSize > matrix.baris || minBlockSize > matrix.kolom) {
+                System.out.println("Ukuran minimum blok tidak valid! Coba lagi.");
+                continue;
+            } else {
+                break;
+            }
+        }
+        int width = matrix.kolom; 
+        int height = matrix.baris;
         QuadTreeNode root = new QuadTreeNode(matrix, 0, 0, width, height, 0);
 
-                
-        QuadTreeNode.divideBlockRecursively(root, matrix, minBlockSize);
-
-                
+        QuadTreeNode.divideBlockRecursively(root, matrix, minBlockSize, error_method, threshold);                
         Matriks compressed = root.createImage();
-
-                
         InputOutputFile.outputFile(compressed, inputPath);
-
-                
         System.out.println("Total nodes: " + root.countNodes());
         System.out.println("Max depth: " + root.getMaxDepth());
-
     }
-
-    
-
 }

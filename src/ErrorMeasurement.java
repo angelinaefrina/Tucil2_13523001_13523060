@@ -1,12 +1,29 @@
 import strukturdata.Matriks;
-import strukturdata.QuadTreeNode;
 
 public class ErrorMeasurement {
+    public static boolean checkThresholdMethodError(Matriks matrix, int error_method, double threshold) {
+        double error = 0.0;
+        if (error_method == 1) {
+           error = ErrorMeasurement.variance(matrix);
+        } else if (error_method == 2) {
+            error = ErrorMeasurement.mean_absolute_deviation(matrix);
+        }
+        else if (error_method == 3) {
+            error = ErrorMeasurement.max_pixel_difference(matrix);
+        } else if (error_method == 4) {
+            error = ErrorMeasurement.entropy(matrix);}
+        
+        if (error > threshold) {
+            System.out.println("Error: " + error + " > threshold: " + threshold);
+            return true; 
+        } else {
+            return false; 
+        }
+    }
     //metode pengukuran error dengan variance
-    public static double variance(QuadTreeNode newNode){
-        Matriks newBlockPixels = newNode.getBlockPixels(null, 0, 0, 0, 0); 
-        int panjang = newBlockPixels.kolom;
-        int lebar = newBlockPixels.baris;  
+    public static double variance(Matriks matrix){
+        int panjang = matrix.baris;
+        int lebar = matrix.kolom;  
         int N = panjang*lebar;
 
         int sum_red = 0;
@@ -14,9 +31,9 @@ public class ErrorMeasurement {
         int sum_blue = 0;
         for (int i=0;i<panjang;i++){
             for (int j = 0; j < lebar; j++){
-                sum_red += newBlockPixels.mat[i][j].getRed();
-                sum_green += newBlockPixels.mat[i][j].getGreen();
-                sum_blue += newBlockPixels.mat[i][j].getBlue();
+                sum_red += matrix.mat[i][j].getRed();
+                sum_green += matrix.mat[i][j].getGreen();
+                sum_blue += matrix.mat[i][j].getBlue();
             }
         }
 
@@ -29,9 +46,9 @@ public class ErrorMeasurement {
         double c = 0;
         for (int i=0;i<panjang;i++){
             for (int j=0;j<lebar;j++){
-                a += Math.pow((newBlockPixels.mat[i][j].getRed()-average_red),2);
-                b += Math.pow((newBlockPixels.mat[i][j].getGreen()-average_green),2);
-                c += Math.pow((newBlockPixels.mat[i][j].getBlue()-average_blue),2);
+                a += Math.pow((matrix.mat[i][j].getRed()-average_red),2);
+                b += Math.pow((matrix.mat[i][j].getGreen()-average_green),2);
+                c += Math.pow((matrix.mat[i][j].getBlue()-average_blue),2);
             }
         }
 
@@ -44,10 +61,9 @@ public class ErrorMeasurement {
     }
 
     //metode pengukuran error dengan Mean Absolute Deviation (MAD)
-    public static double mean_absolute_deviation(QuadTreeNode newNode){
-        Matriks newBlockPixels = newNode.getBlockPixels(null, 0, 0, 0, 0); 
-        int panjang = newBlockPixels.kolom;
-        int lebar = newBlockPixels.baris;  
+    public static double mean_absolute_deviation(Matriks matrix){
+        int panjang = matrix.baris;
+        int lebar = matrix.kolom;   
         int N = panjang*lebar;
 
         int sum_red = 0;
@@ -55,9 +71,9 @@ public class ErrorMeasurement {
         int sum_blue = 0;
         for (int i=0;i<panjang;i++){
             for (int j=0;j<lebar;j++){
-                sum_red += newBlockPixels.mat[i][j].getRed();
-                sum_green += newBlockPixels.mat[i][j].getGreen();
-                sum_blue += newBlockPixels.mat[i][j].getBlue();
+                sum_red += matrix.mat[i][j].getRed();
+                sum_green += matrix.mat[i][j].getGreen();
+                sum_blue += matrix.mat[i][j].getBlue();
             }
         }
 
@@ -70,9 +86,9 @@ public class ErrorMeasurement {
         double c = 0;
         for (int i=0;i<panjang;i++){
             for (int j=0;j<lebar;j++){
-                a += Math.abs(newBlockPixels.mat[i][j].getRed()-average_red);
-                b += Math.abs(newBlockPixels.mat[i][j].getGreen()-average_green);
-                c += Math.abs(newBlockPixels.mat[i][j].getBlue()-average_blue);
+                a += Math.abs(matrix.mat[i][j].getRed()-average_red);
+                b += Math.abs(matrix.mat[i][j].getGreen()-average_green);
+                c += Math.abs(matrix.mat[i][j].getBlue()-average_blue);
             }
         }
 
@@ -85,10 +101,9 @@ public class ErrorMeasurement {
     }
 
     //metode pengukuran error dengan Max Pixel Difference (MPD)
-    public static double max_pixel_difference(QuadTreeNode newNode){
-        Matriks newBlockPixels = newNode.getBlockPixels(null, 0, 0, 0, 0); 
-        int panjang = newBlockPixels.kolom;
-        int lebar = newBlockPixels.baris;
+    public static double max_pixel_difference(Matriks matrix){
+        int panjang = matrix.baris;
+        int lebar = matrix.kolom;  
 
         int min_red = 99999;
         int max_red = -99999;
@@ -98,9 +113,9 @@ public class ErrorMeasurement {
         int max_blue = -99999;
         for(int i=0;i<panjang;i++){
             for(int j=0;j<lebar;j++){
-                int red_now = newBlockPixels.mat[i][j].getRed();
-                int green_now = newBlockPixels.mat[i][j].getGreen();
-                int blue_now = newBlockPixels.mat[i][j].getBlue();
+                int red_now = matrix.mat[i][j].getRed();
+                int green_now = matrix.mat[i][j].getGreen();
+                int blue_now = matrix.mat[i][j].getBlue();
                 if(red_now>max_red){
                     max_red=red_now;
                 }
@@ -131,10 +146,9 @@ public class ErrorMeasurement {
     }
 
     //metode pengukuran error dengan Entropy
-    public static double entropy(QuadTreeNode newNode){
-        Matriks newBlockPixels = newNode.getBlockPixels(null, 0, 0, 0, 0); 
-        int panjang = newBlockPixels.kolom;
-        int lebar = newBlockPixels.baris;
+    public static double entropy(Matriks matrix){
+        int panjang = matrix.baris;
+        int lebar = matrix.kolom;  
         int N = panjang*lebar;
 
         int[] freq_red = new int[256];
@@ -143,9 +157,9 @@ public class ErrorMeasurement {
 
         for(int i=0;i<panjang;i++){
             for(int j=0;j<lebar;j++){
-                int red_now = newBlockPixels.mat[i][j].getRed();
-                int green_now = newBlockPixels.mat[i][j].getGreen();
-                int blue_now = newBlockPixels.mat[i][j].getBlue();
+                int red_now = matrix.mat[i][j].getRed();
+                int green_now = matrix.mat[i][j].getGreen();
+                int blue_now = matrix.mat[i][j].getBlue();
                 freq_red[red_now]++;
                 freq_green[green_now]++;
                 freq_blue[blue_now]++;
@@ -162,9 +176,9 @@ public class ErrorMeasurement {
         double entropy_blue = 0;
         for(int i=0;i<panjang;i++){
             for(int j=0;j<lebar;j++){
-                int red_now = newBlockPixels.mat[i][j].getRed();
-                int green_now = newBlockPixels.mat[i][j].getGreen();
-                int blue_now = newBlockPixels.mat[i][j].getBlue();
+                int red_now = matrix.mat[i][j].getRed();
+                int green_now = matrix.mat[i][j].getGreen();
+                int blue_now = matrix.mat[i][j].getBlue();
                 if(freq_red[red_now] != 0){
                     entropy_red += freq_red[red_now]*(Math.log(freq_red[red_now])/Math.log(2));
                 }

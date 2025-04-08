@@ -50,18 +50,18 @@ public class InputOutputFile {
             BufferedImage image = ImageIO.read(file);
             int lebar = image.getWidth(); // lebar dalam pixel
             int tinggi = image.getHeight(); // tinggi dalam pixel
-            Pixel[][] matriks_pixel = new Pixel[tinggi][lebar];
+            Matriks matriks_pixel = new Matriks(tinggi, lebar);
 
             // Mengisi matriks dengan nilai intensitas RGB tiap pixel secara horizontal
             for (int x = 0; x < lebar; x++) {
                 for (int y = 0; y < tinggi; y++) {
                     int rgb = image.getRGB(x, y);
                     Color color = new Color(rgb);
-                    matriks_pixel[x][y] = new Pixel(color.getRed(), color.getGreen(), color.getBlue());
+                    matriks_pixel.mat[y][x] = new Pixel(color.getRed(), color.getGreen(), color.getBlue());
                 }
             }
 
-            return new Matriks(matriks_pixel);
+            return matriks_pixel;
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -93,7 +93,7 @@ public class InputOutputFile {
             for (int j = 0; j < width; j++) {
                 Pixel p = compressed.mat[i][j];
                 int rgb = (p.getRed() << 16) | (p.getGreen() << 8) | p.getBlue();
-                outputImage.setRGB(i, j, rgb);
+                outputImage.setRGB(j, i, rgb);
             }
         }
 

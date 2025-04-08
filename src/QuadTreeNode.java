@@ -27,7 +27,7 @@ public class QuadTreeNode {
     public boolean isDivideable (double minblock_size, Matriks region, int error_method, double threshold) {
         int half_w = this.w / 2;
         int half_h = this.h / 2;
-        boolean isError = ErrorMeasurement.checkThresholdMethodError(region, error_method, threshold);
+        boolean isError = ErrorMeasurement.checkThresholdMethodError(this.block, error_method, threshold);
 
         return (!this.isParent && this.w * this.h > minblock_size && half_w*half_h> minblock_size && !isError);
     }
@@ -61,7 +61,6 @@ public class QuadTreeNode {
     }
 
     public static void divideBlockRecursively(QuadTreeNode node, Matriks region, double minBlockSize, int error_method, double threshold) {
-        boolean isError = ErrorMeasurement.checkThresholdMethodError(region, error_method, threshold);
         if (node.isDivideable(minBlockSize,region, error_method, threshold) ) {
             QuadTreeNode[] children = node.divideBlock(region, minBlockSize, error_method, threshold);
             if (children != null) {
