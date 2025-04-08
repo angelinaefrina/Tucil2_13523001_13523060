@@ -1,21 +1,22 @@
-import strukturdata.*;
+import strukturdata.Matriks;
+import strukturdata.QuadTreeNode;
 
 public class ErrorMeasurement {
     //metode pengukuran error dengan variance
     public static double variance(QuadTreeNode newNode){
-        Pixel[][] newBlockPixels = newNode.getBlockPixels(null, 0, 0, 0, 0); 
-        int panjang = newBlockPixels.length;
-        int lebar = newBlockPixels[0].length;  
+        Matriks newBlockPixels = newNode.getBlockPixels(null, 0, 0, 0, 0); 
+        int panjang = newBlockPixels.kolom;
+        int lebar = newBlockPixels.baris;  
         int N = panjang*lebar;
 
         int sum_red = 0;
         int sum_green = 0;
         int sum_blue = 0;
         for (int i=0;i<panjang;i++){
-            for (int j=0;j<lebar;j++){
-                sum_red += newBlockPixels[i][j].getRed();
-                sum_green += newBlockPixels[i][j].getGreen();
-                sum_blue += newBlockPixels[i][j].getBlue();
+            for (int j = 0; j < lebar; j++){
+                sum_red += newBlockPixels.mat[i][j].getRed();
+                sum_green += newBlockPixels.mat[i][j].getGreen();
+                sum_blue += newBlockPixels.mat[i][j].getBlue();
             }
         }
 
@@ -28,9 +29,9 @@ public class ErrorMeasurement {
         double c = 0;
         for (int i=0;i<panjang;i++){
             for (int j=0;j<lebar;j++){
-                a += Math.pow((newBlockPixels[i][j].getRed()-average_red),2);
-                b += Math.pow((newBlockPixels[i][j].getGreen()-average_green),2);
-                c += Math.pow((newBlockPixels[i][j].getBlue()-average_blue),2);
+                a += Math.pow((newBlockPixels.mat[i][j].getRed()-average_red),2);
+                b += Math.pow((newBlockPixels.mat[i][j].getGreen()-average_green),2);
+                c += Math.pow((newBlockPixels.mat[i][j].getBlue()-average_blue),2);
             }
         }
 
@@ -44,9 +45,9 @@ public class ErrorMeasurement {
 
     //metode pengukuran error dengan Mean Absolute Deviation (MAD)
     public static double mean_absolute_deviation(QuadTreeNode newNode){
-        Pixel[][] newBlockPixels = newNode.getBlockPixels(null, 0, 0, 0, 0); 
-        int panjang = newBlockPixels.length;
-        int lebar = newBlockPixels[0].length;  
+        Matriks newBlockPixels = newNode.getBlockPixels(null, 0, 0, 0, 0); 
+        int panjang = newBlockPixels.kolom;
+        int lebar = newBlockPixels.baris;  
         int N = panjang*lebar;
 
         int sum_red = 0;
@@ -54,9 +55,9 @@ public class ErrorMeasurement {
         int sum_blue = 0;
         for (int i=0;i<panjang;i++){
             for (int j=0;j<lebar;j++){
-                sum_red += newBlockPixels[i][j].getRed();
-                sum_green += newBlockPixels[i][j].getGreen();
-                sum_blue += newBlockPixels[i][j].getBlue();
+                sum_red += newBlockPixels.mat[i][j].getRed();
+                sum_green += newBlockPixels.mat[i][j].getGreen();
+                sum_blue += newBlockPixels.mat[i][j].getBlue();
             }
         }
 
@@ -69,9 +70,9 @@ public class ErrorMeasurement {
         double c = 0;
         for (int i=0;i<panjang;i++){
             for (int j=0;j<lebar;j++){
-                a += Math.abs(newBlockPixels[i][j].getRed()-average_red);
-                b += Math.abs(newBlockPixels[i][j].getGreen()-average_green);
-                c += Math.abs(newBlockPixels[i][j].getBlue()-average_blue);
+                a += Math.abs(newBlockPixels.mat[i][j].getRed()-average_red);
+                b += Math.abs(newBlockPixels.mat[i][j].getGreen()-average_green);
+                c += Math.abs(newBlockPixels.mat[i][j].getBlue()-average_blue);
             }
         }
 
@@ -85,9 +86,9 @@ public class ErrorMeasurement {
 
     //metode pengukuran error dengan Max Pixel Difference (MPD)
     public static double max_pixel_difference(QuadTreeNode newNode){
-        Pixel[][] newBlockPixels = newNode.getBlockPixels(null, 0, 0, 0, 0); 
-        int panjang = newBlockPixels.length;
-        int lebar = newBlockPixels[0].length;
+        Matriks newBlockPixels = newNode.getBlockPixels(null, 0, 0, 0, 0); 
+        int panjang = newBlockPixels.kolom;
+        int lebar = newBlockPixels.baris;
 
         int min_red = 99999;
         int max_red = -99999;
@@ -97,9 +98,9 @@ public class ErrorMeasurement {
         int max_blue = -99999;
         for(int i=0;i<panjang;i++){
             for(int j=0;j<lebar;j++){
-                int red_now = newBlockPixels[i][j].getRed();
-                int green_now = newBlockPixels[i][j].getGreen();
-                int blue_now = newBlockPixels[i][j].getBlue();
+                int red_now = newBlockPixels.mat[i][j].getRed();
+                int green_now = newBlockPixels.mat[i][j].getGreen();
+                int blue_now = newBlockPixels.mat[i][j].getBlue();
                 if(red_now>max_red){
                     max_red=red_now;
                 }
