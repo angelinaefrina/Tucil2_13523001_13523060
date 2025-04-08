@@ -126,7 +126,58 @@ public class ErrorMeasurement {
         int d_green = max_green-min_green;
         int d_blue = max_blue-min_blue;
         
-        double d_rgb = (d_red+d_green+d_blue)/3;
+        double d_rgb = (double)(d_red+d_green+d_blue)/3;
         return d_rgb;
+    }
+
+    //metode pengukuran error dengan Entropy
+    public static double entropy(QuadTreeNode newNode){
+        Matriks newBlockPixels = newNode.getBlockPixels(null, 0, 0, 0, 0); 
+        int panjang = newBlockPixels.kolom;
+        int lebar = newBlockPixels.baris;
+        int N = panjang*lebar;
+
+        int[] freq_red = new int[256];
+        int[] freq_green = new int[256];    
+        int[] freq_blue = new int[256];
+
+        for(int i=0;i<panjang;i++){
+            for(int j=0;j<lebar;j++){
+                int red_now = newBlockPixels.mat[i][j].getRed();
+                int green_now = newBlockPixels.mat[i][j].getGreen();
+                int blue_now = newBlockPixels.mat[i][j].getBlue();
+                freq_red[red_now]++;
+                freq_green[green_now]++;
+                freq_blue[blue_now]++;
+            }
+        }
+        for(int i=0;i<256;i++){
+            freq_red[i] = freq_red[i]/N;
+            freq_green[i] = freq_green[i]/N;
+            freq_blue[i] = freq_blue[i]/N;
+        }
+
+        double entropy_red = 0;
+        double entropy_green = 0;
+        double entropy_blue = 0;
+        for(int i=0;i<panjang;i++){
+            for(int j=0;j<lebar;j++){
+                int red_now = newBlockPixels.mat[i][j].getRed();
+                int green_now = newBlockPixels.mat[i][j].getGreen();
+                int blue_now = newBlockPixels.mat[i][j].getBlue();
+                if(freq_red[red_now] != 0){
+                    entropy_red += freq_red[red_now]*(Math.log(freq_red[red_now])/Math.log(2));
+                }
+                if(freq_green[green_now] != 0){
+                    entropy_green += freq_green[green_now]*(Math.log(freq_green[green_now])/Math.log(2));
+                }
+                if(freq_blue[blue_now] != 0){
+                    entropy_blue += freq_blue[blue_now]*(Math.log(freq_blue[blue_now])/Math.log(2));
+                }
+            }
+        }
+
+        double entropy_rgb = -(entropy_red+entropy_green+entropy_blue)/3;
+        return entropy_rgb;
     }
 }
