@@ -1,12 +1,32 @@
-import strukturdata.Matriks;
+import java.io.File;
 import java.util.Scanner;
+
+import strukturdata.Matriks;
 
 public class ImageCompression {
 
+    public static double hitungPersentaseKompresi(File originalFile, File compressedFile) {
+        if (!originalFile.exists() || !compressedFile.exists()) {
+            throw new IllegalArgumentException("Salah satu file tidak ditemukan.");
+        }
 
+        long originalSize = originalFile.length();
+        System.out.println("Ukuran gambar asli: " + originalSize + " bytes");
+        long compressedSize = compressedFile.length();
+        System.out.println("Ukuran gambar hasil kompresi: " + compressedSize + " bytes");
+
+        if (originalSize == 0) {
+            throw new IllegalArgumentException("Ukuran file asli tidak boleh nol.");
+        }
+
+        double ratio = 1.0 - ((double) compressedSize / originalSize);
+        return ratio * 100;
+    }
     public static void main(String[] args) {
-        String inputPath = InputOutputFile.inputFile();
-        Matriks matrix = InputOutputFile.bacaFileGambar(inputPath);
+
+        // Meminta input file
+        String inputpath = InputOutputFile.inputFile();
+        Matriks matrix = InputOutputFile.bacaFileGambar(inputpath);
         if(matrix == null) {
             System.out.println("Gagal membaca gambar. Program dihentikan.");
             return;
@@ -27,7 +47,8 @@ public class ImageCompression {
            } else {
                break;
            }
-       }
+        }
+
         // Meminta input threshold
         double threshold = 0.0;
         while (true) {
@@ -58,7 +79,9 @@ public class ImageCompression {
                 }
             }
             break; 
-      }
+        }
+
+        // Meminta input ukuran blok minimum
         double minBlockSize = 0.0;
         while (true) {
             System.out.println("Masukkan ukuran blok minimum (luas piksel) : ");
@@ -70,14 +93,27 @@ public class ImageCompression {
                 break;
             }
         }
+
+
         int width = matrix.kolom; 
         int height = matrix.baris;
         QuadTreeNode root = new QuadTreeNode(matrix, 0, 0, width, height, 0);
 
+        long start_time = System.currentTimeMillis();
+
         QuadTreeNode.divideBlockRecursively(root, matrix, minBlockSize, error_method, threshold);                
         Matriks compressed = root.createImage();
-        InputOutputFile.outputFile(compressed, inputPath);
-        System.out.println("Total nodes: " + root.countNodes());
-        System.out.println("Max depth: " + root.getMaxDepth());
+        String outputpath = InputOutputFile.outputFile(compressed, inputpath);
+
+        long end_time = System.currentTimeMillis();
+
+        System.out.println();
+        System.out.println("Waktu eksekusi: " + (end_time - start_time) + " ms");
+        File original = new File(inputpath);
+        File hasil = new File(outputpath);
+        double persentase = hitungPersentaseKompresi(original, hasil);
+        System.out.printf("Persentase kompresi: %.2f%%\n", persentase);
+        System.out.println("Banyak Simpul Quadtree: " + root.countNodes());
+        System.out.println("Kedalaman QuadTree: " + root.getMaxDepth());
     }
 }

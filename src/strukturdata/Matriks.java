@@ -107,7 +107,7 @@ public class Matriks {
         return Out;
     }
 
-    public void saveMatrixToText(Matriks M, String filePath) {
+    public static void saveMatrixToText(Matriks M, String filePath) {
     try (FileWriter writer = new FileWriter(filePath)) {
         for (Pixel[] row : M.mat) {
             for (Pixel p : row) {

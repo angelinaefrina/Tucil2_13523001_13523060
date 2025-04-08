@@ -1,4 +1,5 @@
-import strukturdata.*;
+import strukturdata.Matriks;
+import strukturdata.Pixel;
 public class QuadTreeNode {
     Matriks block;
     int x, y, w, h, depth;
@@ -29,7 +30,17 @@ public class QuadTreeNode {
         int half_h = this.h / 2;
         boolean isError = ErrorMeasurement.checkThresholdMethodError(this.block, error_method, threshold);
 
-        return (!this.isParent && this.w * this.h > minblock_size && half_w*half_h> minblock_size && !isError);
+        // if (this.w * this.h <= minblock_size) {
+        //     System.out.println("Block size is too small: " + this.w * this.h);
+        // }
+        // if (half_w * half_h <= minblock_size) {
+        //     System.out.println("Half block size is too small: " + half_w * half_h);
+        // }
+        // if (!isError) {
+        //     System.out.println("Error threshold exceeded");
+        // }
+        // System.out.println(" ");
+        return (!this.isParent && this.w * this.h > minblock_size && half_w*half_h> minblock_size && isError);
     }
 
     public Matriks getBlockPixels (Matriks region, int x, int y, int w, int h) {
@@ -43,19 +54,20 @@ public class QuadTreeNode {
     }
 
     public QuadTreeNode[] divideBlock (Matriks region, double minblock_size, int error_method, double threshold) {
-        
         if (!isDivideable(minblock_size,region, error_method, threshold)) {
             return null;
         } 
         else {
             this.isParent = true;
-            int half_w = this.w / 2;
-            int half_h = this.h / 2;
+            int half_w1 = this.w / 2;
+            int half_w2 = this.w - half_w1;
+            int half_h1 = this.h / 2;
+            int half_h2 = this.h - half_h1;
 
-            q1 = createChildNode(region, this.x, this.y, half_w, half_h, this.depth + 1);
-            q2 = createChildNode(region, this.x + half_w, this.y, half_w, half_h, this.depth + 1);
-            q3 = createChildNode(region, this.x, this.y + half_h, half_w, half_h, this.depth + 1);
-            q4 = createChildNode(region, this.x + half_w, this.y + half_h, half_w, half_h, this.depth + 1);
+            q1 = createChildNode(region, this.x, this.y, half_w1, half_h1, this.depth + 1);
+            q2 = createChildNode(region, this.x + half_w1, this.y, half_w2, half_h1, this.depth + 1);
+            q3 = createChildNode(region, this.x, this.y + half_h1, half_w1, half_h2, this.depth + 1);
+            q4 = createChildNode(region, this.x + half_w1, this.y + half_h1, half_w2, half_h2, this.depth + 1);
             return new QuadTreeNode[] {q1, q2, q3, q4};
         }
     }
@@ -129,5 +141,20 @@ public class QuadTreeNode {
             return Math.max(Math.max(d1, d2), Math.max(d3, d4));
         }
     }
+
+    // public static void main(String[] args) {
+
+    //     // Matriks.saveMatrixToText(region, "C:/Users/Lenovo/Documents/Stima/Tucil2_13523001_13523060/test/image_data.txt");
+    //     // // double m1 = ErrorMeasurement.variance(region); // 0
+    //     // // System.out.println("Error: " + m1);
+    //     // // double m2 = ErrorMeasurement.mean_absolute_deviation(region); // 0
+    //     // // System.out.println("Error: " + m2);
+    //     // // double m3 = ErrorMeasurement.max_pixel_difference(region);// 166
+    //     // // System.out.println("Error: " + m3);
+    //     // // double m4 = ErrorMeasurement.entropy(region); // 0
+    //     // // System.out.println("Error: " + m4);
+
+        
+    // }
 
 }

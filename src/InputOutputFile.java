@@ -70,7 +70,7 @@ public class InputOutputFile {
     }
 
 
-    public static void outputFile(Matriks compressed, String inputpath) {
+    public static String outputFile(Matriks compressed, String inputpath) {
         Scanner scanner = new Scanner(System.in);
         String outputpath;
 
@@ -112,6 +112,8 @@ public class InputOutputFile {
         } catch (IOException e) {
             System.err.println("Gagal menyimpan gambar: " + e.getMessage());
         }
+
+        return outputFile.getAbsolutePath();
     }
 
 

@@ -4,7 +4,7 @@ public class ErrorMeasurement {
     public static boolean checkThresholdMethodError(Matriks matrix, int error_method, double threshold) {
         double error = 0.0;
         if (error_method == 1) {
-           error = ErrorMeasurement.variance(matrix);
+            error = ErrorMeasurement.variance(matrix);
         } else if (error_method == 2) {
             error = ErrorMeasurement.mean_absolute_deviation(matrix);
         }
@@ -14,7 +14,6 @@ public class ErrorMeasurement {
             error = ErrorMeasurement.entropy(matrix);}
         
         if (error > threshold) {
-            System.out.println("Error: " + error + " > threshold: " + threshold);
             return true; 
         } else {
             return false; 
@@ -37,9 +36,9 @@ public class ErrorMeasurement {
             }
         }
 
-        double average_red = sum_red/N;
-        double average_green = sum_green/N;
-        double average_blue = sum_blue/N;
+        double average_red = (double)sum_red/N;
+        double average_green = (double)sum_green/N;
+        double average_blue = (double)sum_blue/N;
 
         double a = 0;
         double b = 0;
@@ -52,9 +51,9 @@ public class ErrorMeasurement {
             }
         }
 
-        double variansi_red = (1/N)*a;
-        double variansi_green = (1/N)*b;
-        double variansi_blue = (1/N)*c;
+        double variansi_red = a*N;
+        double variansi_green = b*N;
+        double variansi_blue = c*N;
 
         double variansi_rgb =  (variansi_red+variansi_green+variansi_blue)/3;
         return variansi_rgb;
@@ -77,9 +76,9 @@ public class ErrorMeasurement {
             }
         }
 
-        double average_red = sum_red/N;
-        double average_green = sum_green/N;
-        double average_blue = sum_blue/N;
+        double average_red = (double)sum_red/N;
+        double average_green = (double)sum_green/N;
+        double average_blue = (double)sum_blue/N;
 
         double a = 0;
         double b = 0;
@@ -92,9 +91,9 @@ public class ErrorMeasurement {
             }
         }
 
-        double MAD_red = (1/N)*a;
-        double MAD_green = (1/N)*b;
-        double MAD_blue = (1/N)*c;
+        double MAD_red = a*N;
+        double MAD_green = b*N;
+        double MAD_blue = c*N;
 
         double MAD_rgb = (MAD_red+MAD_green+MAD_blue)/3;
         return MAD_rgb;
@@ -151,9 +150,9 @@ public class ErrorMeasurement {
         int lebar = matrix.kolom;  
         int N = panjang*lebar;
 
-        int[] freq_red = new int[256];
-        int[] freq_green = new int[256];    
-        int[] freq_blue = new int[256];
+        double[] freq_red = new double[256];
+        double[] freq_green = new double[256];    
+        double[] freq_blue = new double[256];
 
         for(int i=0;i<panjang;i++){
             for(int j=0;j<lebar;j++){
