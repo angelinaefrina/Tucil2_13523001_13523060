@@ -109,6 +109,23 @@ public class ImageCompression {
                 break;
             }
         }
+
+        // Meminta alamat output gif
+        String output_gif;
+        while (true) { 
+            System.out.println("Masukkan alamat absolut output GIF (contoh: path/compression.gif): ");
+            output_gif = scanner.nextLine().trim();
+            if (output_gif.isEmpty()) {
+                System.out.println("Alamat GIF tidak boleh kosong! Coba lagi.");
+                continue;
+            }
+            else {
+                break;
+            }
+            
+        }
+        
+
         System.out.println();
         System.out.println("=========================================");
         System.out.println("Gambar sedang diproses...");
@@ -137,12 +154,10 @@ public class ImageCompression {
         System.out.println("Kedalaman QuadTree: " + root.getMaxDepth());
 
         // Membuat GIF dari hasil kompresi per kedalaman
-        System.out.println("Masukkan lokasi output GIF (contoh: path/compression.gif): ");
-        String gifOutputPath = scanner.next();
         int maxDepth = root.getMaxDepth();
 
         // Membuat GIF
-        Gif.createGif(root, maxDepth, gifOutputPath);
+        Gif.createGif(root, maxDepth, output_gif);
     }
 
     public static double hitungPersentaseKompresi(File originalFile, File compressedFile) {
