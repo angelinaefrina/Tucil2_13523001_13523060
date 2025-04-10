@@ -4,25 +4,25 @@ import strukturdata.Matriks;
 
 public class ImageCompression {
 
-    public static double hitungPersentaseKompresi(File originalFile, File compressedFile) {
-        if (!originalFile.exists() || !compressedFile.exists()) {
-            throw new IllegalArgumentException("Salah satu file tidak ditemukan.");
-        }
-
-        long originalSize = originalFile.length();
-        System.out.println("Ukuran gambar asli: " + originalSize + " bytes");
-        long compressedSize = compressedFile.length();
-        System.out.println("Ukuran gambar hasil kompresi: " + compressedSize + " bytes");
-
-        if (originalSize == 0) {
-            throw new IllegalArgumentException("Ukuran file asli tidak boleh nol.");
-        }
-
-        double ratio = 1.0 - ((double) compressedSize / originalSize);
-        return ratio * 100;
-    }
     public static void main(String[] args) {
+        String asciiArt = """
+            _____                 _ _____               _____                           
+           |  _  |               | |_   _|             |_   _|                          
+           | | | |_   _  __ _  __| | | |_ __ ___  ___    | | _ __ ___   __ _  __ _  ___ 
+           | | | | | | |/ _` |/ _` | | | '__/ _ \\/ _ \\   | || '_ ` _ \\ / _` |/ _` |/ _ \\
+           \\ \\/' / |_| | (_| | (_| | | | | |  __/  __/  _| || | | | | | (_| | (_| |  __/
+            \\_/\\_\\\\__,_|\\__,_|\\__,_| \\_/_|  \\___|\\___|  \\___/_| |_| |_|\\__,_|\\__, |\\___|
+            _____                                         _                   __/ |     
+           /  __ \\                                       (_)                 |___/      
+           | /  \\/ ___  _ __ ___  _ __  _ __ ___  ___ ___ _  ___  _ __                  
+           | |    / _ \\| '_ ` _ \\| '_ \\| '__/ _ \\/ __/ __| |/ _ \\| '_ \\                 
+           | \\__/\\ (_) | | | | | | |_) | | |  __/\\__ \\__ \\ | (_) | | | |                
+            \\____/\\___/|_| |_| |_| .__/|_|  \\___||___/___/_|\\___/|_| |_|                
+                                 | |                                                  
+                                 |_|                                                  
+          """;
 
+        System.out.println(asciiArt);
         // Meminta input file
         String inputpath = InputOutputFile.inputFile();
         Matriks matrix = InputOutputFile.bacaFileGambar(inputpath);
@@ -30,6 +30,8 @@ public class ImageCompression {
             System.out.println("Gagal membaca gambar. Program dihentikan.");
             return;
         }
+
+        // Meminta input metode perhitungan error
         Scanner scanner = new Scanner(System.in);
         System.out.println("Pilih metode perhitungan error:");
         System.out.println("1. Variance");
@@ -86,7 +88,7 @@ public class ImageCompression {
             System.out.println("Masukkan ukuran blok minimum (luas piksel) : ");
             minBlockSize = scanner.nextDouble();
             scanner.nextLine();
-            if (minBlockSize <= 0 || minBlockSize > matrix.baris || minBlockSize > matrix.kolom) {
+            if (minBlockSize < 4 || minBlockSize > matrix.baris || minBlockSize > matrix.kolom) {
                 System.out.println("Ukuran minimum blok tidak valid! Coba lagi.");
                 continue;
             } else {
@@ -97,7 +99,7 @@ public class ImageCompression {
         // Meminta alamat output gambar
         String outputpath;
         while (true) {
-            System.out.println("Masukkan alamat absolut gambar : ");
+            System.out.println("Masukkan alamat absolut gambar hasil kompresi : ");
             outputpath = scanner.nextLine().trim();
             if (outputpath.isEmpty()) {
                 System.out.println("Alamat gambar tidak boleh kosong! Coba lagi.");
@@ -107,6 +109,9 @@ public class ImageCompression {
                 break;
             }
         }
+        System.out.println();
+        System.out.println("=========================================");
+        System.out.println("Gambar sedang diproses...");
 
         // Inisialisasi
         int width = matrix.kolom; 
@@ -122,7 +127,7 @@ public class ImageCompression {
 
         long end_time = System.currentTimeMillis();
 
-        System.out.println();
+
         System.out.println("Waktu eksekusi: " + (end_time - start_time) + " ms");
         File original = new File(inputpath);
         File hasil = new File(outputpath);
@@ -132,11 +137,29 @@ public class ImageCompression {
         System.out.println("Kedalaman QuadTree: " + root.getMaxDepth());
 
         // Membuat GIF dari hasil kompresi per kedalaman
-        System.out.println("Masukkan lokasi output GIF (contoh: output/compression.gif): ");
+        System.out.println("Masukkan lokasi output GIF (contoh: path/compression.gif): ");
         String gifOutputPath = scanner.next();
         int maxDepth = root.getMaxDepth();
 
         // Membuat GIF
         Gif.createGif(root, maxDepth, gifOutputPath);
+    }
+
+    public static double hitungPersentaseKompresi(File originalFile, File compressedFile) {
+        if (!originalFile.exists() || !compressedFile.exists()) {
+            throw new IllegalArgumentException("Salah satu file tidak ditemukan.");
+        }
+
+        long originalSize = originalFile.length();
+        System.out.println("Ukuran gambar asli: " + originalSize + " bytes");
+        long compressedSize = compressedFile.length();
+        System.out.println("Ukuran gambar hasil kompresi: " + compressedSize + " bytes");
+
+        if (originalSize == 0) {
+            throw new IllegalArgumentException("Ukuran file asli tidak boleh nol.");
+        }
+
+        double ratio = 1.0 - ((double) compressedSize / originalSize);
+        return ratio * 100;
     }
 }

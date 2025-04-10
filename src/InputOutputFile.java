@@ -13,8 +13,6 @@ public class InputOutputFile {
     public static String inputFile(){
 
         System.out.println("=========================================");
-        System.out.println("SELAMAT DATANG DI QUADTREE IMAGE COMPRESSION!");
-        System.out.println("=========================================");
         System.out.println();
 
         Scanner scanner = new Scanner(System.in);

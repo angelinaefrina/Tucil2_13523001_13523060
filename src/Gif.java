@@ -1,12 +1,12 @@
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageOutputStream;
 import javax.imageio.ImageWriter;
 import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.metadata.IIOMetadataNode;
-import javax.imageio.IIOImage;
+import javax.imageio.stream.ImageOutputStream;
 import strukturdata.Matriks;
 import strukturdata.Pixel;
 
@@ -32,7 +32,7 @@ public class Gif {
             }
 
             gifWriter.endWriteSequence();
-            System.out.println("GIF berhasil dibuat di: " + outputPath);
+            System.out.println("GIF berhasil dibuat!");
         } catch (IOException e) {
             System.err.println("Gagal membuat GIF: " + e.getMessage());
         }
