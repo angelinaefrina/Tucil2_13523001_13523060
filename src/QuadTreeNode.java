@@ -28,7 +28,7 @@ public class QuadTreeNode {
     public boolean isDivideable (double minblock_size, Matriks region, int error_method, double threshold) {
         int half_w = this.w / 2;
         int half_h = this.h / 2;
-        boolean isError = ErrorMeasurement.checkThresholdMethodError(this.block, error_method, threshold);
+        boolean isError = ErrorMeasurement.checkImageError(this.block, error_method, threshold);
 
         // if (this.w * this.h <= minblock_size) {
         //     System.out.println("Block size is too small: " + this.w * this.h);

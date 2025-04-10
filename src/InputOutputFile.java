@@ -74,15 +74,30 @@ public class InputOutputFile {
         Scanner scanner = new Scanner(System.in);
         String outputpath;
 
+        String input_format = "png";
+        String output_format = "png";
+
+        int input_dotIndex = inputpath.lastIndexOf('.');
+        if (input_dotIndex != -1 && input_dotIndex < inputpath.length() - 1) {
+            input_format = inputpath.substring(input_dotIndex + 1).toLowerCase();
+        }
+        
+        File file;
         while (true) {
             System.out.println("Masukkan alamat absolut gambar hasil kompresi : ");
             outputpath = scanner.nextLine().trim();
             if (outputpath.isEmpty()) {
                 System.out.println("Alamat gambar tidak boleh kosong! Coba lagi.");
                 continue;
-            } else {
-                break;
+            } 
+            int dotIndex = outputpath.lastIndexOf('.');
+            output_format = outputpath.substring(dotIndex + 1).toLowerCase();
+            if (!output_format.equals(input_format)) {
+                System.out.println("Format output (" + output_format + ") tidak sesuai dengan format input (" + input_format + "). Coba lagi.");
+                continue;
             }
+
+            break;
         }
 
         int height = compressed.baris;
@@ -97,17 +112,12 @@ public class InputOutputFile {
             }
         }
 
-        File inputFile = new File(inputpath);
-        String inputName = inputFile.getName();
-        int dotIndex = inputName.lastIndexOf('.');
-        String baseName = (dotIndex != -1) ? inputName.substring(0, dotIndex) : inputName;
-        String formatName = (dotIndex != -1) ? inputName.substring(dotIndex + 1).toLowerCase() : "png";
+        
 
-        String outputFileName = "compressed_" + baseName + "." + formatName;
-        File outputFile = new File(outputpath, outputFileName);
+        File outputFile = new File(outputpath);
 
         try {
-            ImageIO.write(outputImage, formatName, outputFile);
+            ImageIO.write(outputImage, output_format, outputFile);
             System.out.println("Gambar hasil kompresi berhasil disimpan!");
         } catch (IOException e) {
             System.err.println("Gagal menyimpan gambar: " + e.getMessage());

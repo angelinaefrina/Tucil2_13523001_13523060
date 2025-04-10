@@ -1,7 +1,7 @@
 import strukturdata.Matriks;
 
 public class ErrorMeasurement {
-    public static boolean checkThresholdMethodError(Matriks matrix, int error_method, double threshold) {
+    public static boolean checkImageError(Matriks matrix, int error_method, double threshold) {
         double error = 0.0;
         if (error_method == 1) {
             error = ErrorMeasurement.variance(matrix);
@@ -51,9 +51,9 @@ public class ErrorMeasurement {
             }
         }
 
-        double variansi_red = a*N;
-        double variansi_green = b*N;
-        double variansi_blue = c*N;
+        double variansi_red = a/N;
+        double variansi_green = b/N;
+        double variansi_blue = c/N;
 
         double variansi_rgb =  (variansi_red+variansi_green+variansi_blue)/3;
         return variansi_rgb;
@@ -91,9 +91,9 @@ public class ErrorMeasurement {
             }
         }
 
-        double MAD_red = a*N;
-        double MAD_green = b*N;
-        double MAD_blue = c*N;
+        double MAD_red = a/N;
+        double MAD_green = b/N;
+        double MAD_blue = c/N;
 
         double MAD_rgb = (MAD_red+MAD_green+MAD_blue)/3;
         return MAD_rgb;
