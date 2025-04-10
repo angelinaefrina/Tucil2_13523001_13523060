@@ -142,6 +142,43 @@ public class QuadTreeNode {
         }
     }
 
+    public Matriks createImageAtDepth(int targetDepth) {
+        if (this.depth == targetDepth) {
+            // Jika kedalaman saat ini sama dengan target, gunakan warna rata-rata blok
+            return normalizeBlockColor();
+        } else if (this.isParent) {
+            // Rekursif untuk setiap child, jika child null gunakan warna dari node saat ini
+            Matriks image1 = (q1 != null) ? q1.createImageAtDepth(targetDepth) : createFallbackBlock(this.h / 2, this.w / 2);
+            Matriks image2 = (q2 != null) ? q2.createImageAtDepth(targetDepth) : createFallbackBlock(this.h / 2, this.w - this.w / 2);
+            Matriks image3 = (q3 != null) ? q3.createImageAtDepth(targetDepth) : createFallbackBlock(this.h - this.h / 2, this.w / 2);
+            Matriks image4 = (q4 != null) ? q4.createImageAtDepth(targetDepth) : createFallbackBlock(this.h - this.h / 2, this.w - this.w / 2);
+    
+            // Gabungkan matriks dari keempat kuadran
+            Matriks atas = Matriks.ConcatHorizontally(image1, image2);
+            Matriks bawah = Matriks.ConcatHorizontally(image3, image4);
+            return Matriks.ConcatVertically(atas, bawah);
+        } else {
+            // Jika tidak ada child, gunakan warna dari lapisan terakhir yang tersedia
+            return normalizeBlockColor();
+        }
+    }
+    
+    private Matriks createFallbackBlock(int height, int width) {
+        // Membuat blok fallback dengan warna rata-rata dari node saat ini
+        Matriks fallback = new Matriks(height, width);
+        Pixel averageColor = new Pixel(
+            this.block.mat[0][0].getRed(),
+            this.block.mat[0][0].getGreen(),
+            this.block.mat[0][0].getBlue()
+        );
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                fallback.mat[i][j] = averageColor;
+            }
+        }
+        return fallback;
+    }
+
     // public static void main(String[] args) {
 
     //     // Matriks.saveMatrixToText(region, "C:/Users/Lenovo/Documents/Stima/Tucil2_13523001_13523060/test/image_data.txt");

@@ -130,5 +130,13 @@ public class ImageCompression {
         System.out.printf("Persentase kompresi: %.2f%%\n", persentase);
         System.out.println("Banyak Simpul Quadtree: " + root.countNodes());
         System.out.println("Kedalaman QuadTree: " + root.getMaxDepth());
+
+        // Membuat GIF dari hasil kompresi per kedalaman
+        System.out.println("Masukkan lokasi output GIF (contoh: output/compression.gif): ");
+        String gifOutputPath = scanner.next();
+        int maxDepth = root.getMaxDepth();
+
+        // Membuat GIF
+        Gif.createGif(root, maxDepth, gifOutputPath);
     }
 }
