@@ -1,6 +1,5 @@
 import java.io.File;
 import java.util.Scanner;
-
 import strukturdata.Matriks;
 
 public class ImageCompression {
@@ -54,25 +53,25 @@ public class ImageCompression {
         while (true) {
             System.out.println("Masukkan ambang batas (threshold) : ");
             threshold = scanner.nextDouble();
-            if (error_method==1){
-                if (threshold <10 || threshold > 1000) {
+            if (error_method == 1){
+                if (threshold < 10 || threshold > 1000) {
                     System.out.println("Threshold tidak sesuai/invalid! Coba lagi.");
                     continue;
                 }
             }
-            else if (error_method==2){
-                if (threshold <5 || threshold > 20) {
+            else if (error_method == 2){
+                if (threshold < 5 || threshold > 20) {
                     System.out.println("Threshold tidak sesuai/invalid! Coba lagi.");
                     continue;
                 }
             }
-            else if (error_method==3){
-                if (threshold <5 || threshold > 25) {
+            else if (error_method == 3){
+                if (threshold < 5 || threshold > 25) {
                     System.out.println("Threshold tidak sesuai/invalid! Coba lagi.");
                     continue;
                 }
             }
-            else if (error_method==4){
+            else if (error_method == 4){
                 if (threshold <0.5 || threshold > 3.0) {
                     System.out.println("Threshold tidak sesuai/invalid! Coba lagi.");
                     continue;
@@ -86,6 +85,7 @@ public class ImageCompression {
         while (true) {
             System.out.println("Masukkan ukuran blok minimum (luas piksel) : ");
             minBlockSize = scanner.nextDouble();
+            scanner.nextLine();
             if (minBlockSize <= 0 || minBlockSize > matrix.baris || minBlockSize > matrix.kolom) {
                 System.out.println("Ukuran minimum blok tidak valid! Coba lagi.");
                 continue;
@@ -94,16 +94,31 @@ public class ImageCompression {
             }
         }
 
+        // Meminta alamat output gambar
+        String outputpath;
+        while (true) {
+            System.out.println("Masukkan alamat absolut gambar : ");
+            outputpath = scanner.nextLine().trim();
+            if (outputpath.isEmpty()) {
+                System.out.println("Alamat gambar tidak boleh kosong! Coba lagi.");
+                continue;
+            }
+            else {
+                break;
+            }
+        }
 
+        // Inisialisasi
         int width = matrix.kolom; 
         int height = matrix.baris;
         QuadTreeNode root = new QuadTreeNode(matrix, 0, 0, width, height, 0);
 
         long start_time = System.currentTimeMillis();
 
-        QuadTreeNode.divideBlockRecursively(root, matrix, minBlockSize, error_method, threshold);                
-        Matriks compressed = root.createImage();
-        String outputpath = InputOutputFile.outputFile(compressed, inputpath);
+        // Compression
+        QuadTreeNode.divideBlockRecursively(root, matrix, minBlockSize, error_method, threshold); // divide n conquer              
+        Matriks compressed = root.createImage(); // combine
+        InputOutputFile.outputFile(compressed, inputpath, outputpath); // output
 
         long end_time = System.currentTimeMillis();
 

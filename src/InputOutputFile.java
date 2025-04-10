@@ -3,9 +3,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
-
 import javax.imageio.ImageIO;
-
 import strukturdata.Matriks;
 import strukturdata.Pixel;
 
@@ -70,10 +68,7 @@ public class InputOutputFile {
     }
 
 
-    public static String outputFile(Matriks compressed, String inputpath) {
-        Scanner scanner = new Scanner(System.in);
-        String outputpath;
-
+    public static void outputFile(Matriks compressed, String inputpath, String outputpath) {
         String input_format = "png";
         String output_format = "png";
 
@@ -84,12 +79,6 @@ public class InputOutputFile {
         
         File file;
         while (true) {
-            System.out.println("Masukkan alamat absolut gambar hasil kompresi : ");
-            outputpath = scanner.nextLine().trim();
-            if (outputpath.isEmpty()) {
-                System.out.println("Alamat gambar tidak boleh kosong! Coba lagi.");
-                continue;
-            } 
             int dotIndex = outputpath.lastIndexOf('.');
             output_format = outputpath.substring(dotIndex + 1).toLowerCase();
             if (!output_format.equals(input_format)) {
@@ -122,8 +111,6 @@ public class InputOutputFile {
         } catch (IOException e) {
             System.err.println("Gagal menyimpan gambar: " + e.getMessage());
         }
-
-        return outputFile.getAbsolutePath();
     }
 
 
