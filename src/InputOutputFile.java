@@ -66,27 +66,6 @@ public class InputOutputFile {
         }
     }
 
-
-    // String input_format = "png";
-    //     String output_format = "png";
-
-    //     int input_dotIndex = inputpath.lastIndexOf('.');
-    //     if (input_dotIndex != -1 && input_dotIndex < inputpath.length() - 1) {
-    //         input_format = inputpath.substring(input_dotIndex + 1).toLowerCase();
-    //     }
-        
-    //     File file;
-    //     while (true) {
-    //         int dotIndex = outputpath.lastIndexOf('.');
-    //         output_format = outputpath.substring(dotIndex + 1).toLowerCase();
-    //         if (!output_format.equals(input_format)) {
-    //             System.out.println("Format output (" + output_format + ") tidak sesuai dengan format input (" + input_format + "). Coba lagi.");
-    //             continue;
-    //         }
-
-    //         break;
-    //     }
-
     public static void outputFile(Matriks compressed, String outputpath) {
         int height = compressed.baris;
         int width = compressed.kolom;
