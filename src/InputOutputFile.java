@@ -13,6 +13,7 @@ public class InputOutputFile {
     public static String inputFile(){
 
         System.out.println("=========================================");
+
         System.out.println();
 
         Scanner scanner = new Scanner(System.in);
@@ -66,27 +67,27 @@ public class InputOutputFile {
     }
 
 
-    public static void outputFile(Matriks compressed, String inputpath, String outputpath) {
-        String input_format = "png";
-        String output_format = "png";
+    // String input_format = "png";
+    //     String output_format = "png";
 
-        int input_dotIndex = inputpath.lastIndexOf('.');
-        if (input_dotIndex != -1 && input_dotIndex < inputpath.length() - 1) {
-            input_format = inputpath.substring(input_dotIndex + 1).toLowerCase();
-        }
+    //     int input_dotIndex = inputpath.lastIndexOf('.');
+    //     if (input_dotIndex != -1 && input_dotIndex < inputpath.length() - 1) {
+    //         input_format = inputpath.substring(input_dotIndex + 1).toLowerCase();
+    //     }
         
-        File file;
-        while (true) {
-            int dotIndex = outputpath.lastIndexOf('.');
-            output_format = outputpath.substring(dotIndex + 1).toLowerCase();
-            if (!output_format.equals(input_format)) {
-                System.out.println("Format output (" + output_format + ") tidak sesuai dengan format input (" + input_format + "). Coba lagi.");
-                continue;
-            }
+    //     File file;
+    //     while (true) {
+    //         int dotIndex = outputpath.lastIndexOf('.');
+    //         output_format = outputpath.substring(dotIndex + 1).toLowerCase();
+    //         if (!output_format.equals(input_format)) {
+    //             System.out.println("Format output (" + output_format + ") tidak sesuai dengan format input (" + input_format + "). Coba lagi.");
+    //             continue;
+    //         }
 
-            break;
-        }
+    //         break;
+    //     }
 
+    public static void outputFile(Matriks compressed, String outputpath) {
         int height = compressed.baris;
         int width = compressed.kolom;
         BufferedImage outputImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -99,8 +100,12 @@ public class InputOutputFile {
             }
         }
 
+        String output_format = "png";
+        int dotIndex = outputpath.lastIndexOf('.');
+        if (dotIndex != -1 && dotIndex < outputpath.length() - 1) {
+        output_format = outputpath.substring(dotIndex + 1).toLowerCase();
+        }
         
-
         File outputFile = new File(outputpath);
 
         try {

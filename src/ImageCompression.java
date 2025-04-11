@@ -23,6 +23,7 @@ public class ImageCompression {
           """;
 
         System.out.println(asciiArt);
+
         // Meminta input file
         String inputpath = InputOutputFile.inputFile();
         Matriks matrix = InputOutputFile.bacaFileGambar(inputpath);
@@ -62,7 +63,7 @@ public class ImageCompression {
                 }
             }
             else if (error_method == 2){
-                if (threshold < 5 || threshold > 20) {
+                if (threshold < 1 || threshold > 10) {
                     System.out.println("Threshold tidak sesuai/invalid! Coba lagi.");
                     continue;
                 }
@@ -140,7 +141,7 @@ public class ImageCompression {
         // Compression
         QuadTreeNode.divideBlockRecursively(root, matrix, minBlockSize, error_method, threshold); // divide n conquer              
         Matriks compressed = root.createImage(); // combine
-        InputOutputFile.outputFile(compressed, inputpath, outputpath); // output
+        InputOutputFile.outputFile(compressed, outputpath); // output
 
         long end_time = System.currentTimeMillis();
 

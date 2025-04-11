@@ -40,7 +40,7 @@ public class QuadTreeNode {
         //     System.out.println("Error threshold exceeded");
         // }
         // System.out.println(" ");
-        return (!this.isParent && this.w * this.h > minblock_size && half_w*half_h> minblock_size && isError);
+        return (!this.isParent && this.w * this.h > minblock_size && half_w*half_h >= minblock_size && isError);
     }
 
     public Matriks getBlockPixels (Matriks region, int x, int y, int w, int h) {
@@ -83,7 +83,6 @@ public class QuadTreeNode {
         }
     }
 
-    // WIP
     public Matriks createImage() {
         if (this.isParent && q1 != null && q2 != null && q3 != null && q4 != null) {
             Matriks image1 = q1.createImage();
@@ -178,20 +177,5 @@ public class QuadTreeNode {
         }
         return fallback;
     }
-
-    // public static void main(String[] args) {
-
-    //     // Matriks.saveMatrixToText(region, "C:/Users/Lenovo/Documents/Stima/Tucil2_13523001_13523060/test/image_data.txt");
-    //     // // double m1 = ErrorMeasurement.variance(region); // 0
-    //     // // System.out.println("Error: " + m1);
-    //     // // double m2 = ErrorMeasurement.mean_absolute_deviation(region); // 0
-    //     // // System.out.println("Error: " + m2);
-    //     // // double m3 = ErrorMeasurement.max_pixel_difference(region);// 166
-    //     // // System.out.println("Error: " + m3);
-    //     // // double m4 = ErrorMeasurement.entropy(region); // 0
-    //     // // System.out.println("Error: " + m4);
-
-        
-    // }
 
 }
